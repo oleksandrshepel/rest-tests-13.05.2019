@@ -1,3 +1,5 @@
+package weather;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
@@ -9,13 +11,14 @@ public class WeatherTest {
 
     @Test
     public void getWeatherPerCityTest() {
+        String cityName = "Lviv";
         RestAssured.baseURI = BASE_PATH;
         //RestAssured.basePath = "search.php"; -- лучше заменить на аналогичный метод в "ValidatableResponse"
         ValidatableResponse responseCityId = given()
                 .basePath("search.php")// --можно также заменить данный метод и указать basePath в методе get, кторый ниже
                 .param("lang", "ua")
                 .param("return_id", 1)
-                .param("q", "Lviv")
+                .param("q", cityName)
                 .when()
                 //.log().uri()
                 .get()// -- сдесь можно передать в пареметре basePath
@@ -44,8 +47,8 @@ public class WeatherTest {
                 .log().all()
                 .statusCode(200)
         // Сделаем проверку responseBody
-                .body("'{pcity}'", is(cityId)) //-- в данном случае, чтобы сработал json path нужно обернуть в одинарные кавычки {pcity}
+                .body("'{pcity}'", is(cityId)); //-- в данном случае, чтобы сработал json path нужно обернуть в одинарные кавычки {pcity}
                 // .body("any {it.key == '{pcity}'}", is(cityId));//-- сдесь мы применили скриптовый язык groovy path
-                .log().all();
+        System.out.println(responseWeatherId);
     }
 }
