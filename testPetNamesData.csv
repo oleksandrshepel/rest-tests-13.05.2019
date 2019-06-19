@@ -1,0 +1,9 @@
+NAME, EXPECTED STATUS CODE
+horse, 200
+HORSE, 200
+34532, 200
+ЛОШАДЬ, 200
+df34Ава, 200
+<script>alert(123)</script>, 200
+‘ or ‘a’ = ‘a’; DROP TABLE user; SELECT * FROM blog WHERE code LIKE ‘a%’;, 200
+«♣☺♂»  «»‘~!@#$%^&*()?>./<][ /*<!—«» «${code}»;—>, 200

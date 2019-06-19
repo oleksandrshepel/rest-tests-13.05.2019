@@ -4,29 +4,99 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.udc.rest-tests</groupId>
+    <groupId>com.udc.rest-test</groupId>
     <artifactId>rest-tests-13.05.2019</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- Выносим версии библиотек в один раздел для синхронизации их версий (напр: все версии продуктов серенити должны быть синхронизированы) и удобства обновления-->
+    <properties>
+        <serenity.version>2.0.50</serenity.version>
+        <jackson.databuild.version>2.9.9</jackson.databuild.version>
+        <slf4j-simple.version>1.7.26</slf4j-simple.version>
+        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+        <source.encoding>UTF-8</source.encoding>
+        <java.version>8</java.version>
+        <surefire.version>2.20</surefire.version>
+    </properties>
+
+    <build>
+        <plugins>
+
+            <!-- This plugin enable serenity report in html -->
+            <plugin>
+                <groupId>net.serenity-bdd.maven.plugins</groupId>
+                <artifactId>serenity-maven-plugin</artifactId>
+                <version>${serenity.version}</version>
+                <executions>
+                    <execution>
+                        <id>serenity-reports</id>
+                        <phase>post-integration-test</phase> <!-- файлы для отчета в папке target.site.serenity будут
+                        формироваться после команды mvn verify, т.е. будет формироваться файлик index.html открыв,
+                        который в браузере мы получим готовый интерактивный отчет, тут прописано что запуск тестов
+                        посте запуска интеграционных тестов, если интеграционные тесты упадут (т.е. хотябы один зафейлился
+                        мы не сможем сформировать отчет, мы исправили это в плагине сурфайера проигнорировав
+                        падение на выполнении теста который зафейлится (т.е. тест упал и отчет не формируется, мы это игнорим)-->
+                        <goals>
+                            <goal>aggregate</goal><!-- позволяет не вполнять вручную команду mvn serenity aggregate, файл интерактивного отчета index.html будет віполнятся автоматически -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- With help of this plugin we obtain version of java that we need to use-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${source.encoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore> <!--выполнение тестов не останавливается на упавших тестах и доводится до конца -->
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>4.0.0</version>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-rest-assured</artifactId>
+            <version>${serenity.version}</version> <!-- все версии продуктов синхронизированы, и чобы не пересекались версии лучьше плагин и саму депенденси серенити и т.п. прописывать в одинаковых версиях -->
+        </dependency>
+
+        <!-- for JavaObj to JSON serialization -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databuild.version}</version>
+        </dependency>
+
+        <!-- to enable default Serenity logging, if we delete it default serenity logging won't work -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-simple.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <!-- to obtain Serenity Runner + it contains Junit so we delete Junit dependency-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
 
 
     </dependencies>
-
 
 </project>
