@@ -11,7 +11,7 @@
     <!-- Выносим версии библиотек в один раздел для синхронизации их версий (напр: все версии продуктов серенити должны быть синхронизированы) и удобства обновления-->
     <properties>
         <serenity.version>2.0.50</serenity.version>
-        <jackson.databuild.version>2.9.9</jackson.databuild.version>
+        <jackson.databuild.version>2.9.10.7</jackson.databuild.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
         <source.encoding>UTF-8</source.encoding>
